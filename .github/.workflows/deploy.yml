@@ -1,9 +1,9 @@
 name: build-and-deploy
-on: [push,pull]
-workflow_run:
-   workflows: ["test"]
-   status: completed
-  
+on:
+  workflow_run:
+    workflows: ["Tests"]
+    types: [completed]
+    
 permissions:
    contents: read
    packages: write
@@ -15,6 +15,7 @@ jobs:
 
 
    build:
+   if: ${{ github.event.workflow_run.conclusion == 'success' }}
    runs_on: ubuntu_latest
 
    steps: 
@@ -42,7 +43,7 @@ jobs:
      with : 
        context: .
        push: true
-       tags: ghcr.io/${{ github.repository_owner }}/mon-api:latest
+       tags: ghcr.io/${{ github.repository_owner }}/test-cicd:latest
 
 
 
